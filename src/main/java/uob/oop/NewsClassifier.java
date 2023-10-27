@@ -51,9 +51,14 @@ public class NewsClassifier {
     }
 
     public String[] preProcessing() {
-        String[] myCleanedContent = null;
+        String[] myCleanedContent = new String[newsContents.length];
         //TODO 4.2 - 5 marks
 
+        for (int i = 0; i < myCleanedContent.length; i++) {
+            String cleaned = NLP.textCleaning(newsContents[i]);
+            String cleanedLemmanized = NLP.textLemmatization(cleaned);
+            myCleanedContent[i] = NLP.removeStopWords(cleanedLemmanized, myStopWords);
+        }
 
         return myCleanedContent;
     }
