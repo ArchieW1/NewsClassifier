@@ -41,7 +41,13 @@ public class NewsClassifier {
 
     public void loadData() {
         //TODO 4.1 - 2 marks
+        newsTitles = new String[myHTMLs.length];
+        newsContents = new String[myHTMLs.length];
 
+        for (int i = 0; i < myHTMLs.length; i++) {
+            newsTitles[i] = HtmlParser.getNewsTitle(myHTMLs[i]);
+            newsContents[i] = HtmlParser.getNewsContent(myHTMLs[i]);
+        }
     }
 
     public String[] preProcessing() {
