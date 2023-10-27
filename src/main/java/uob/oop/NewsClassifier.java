@@ -132,10 +132,27 @@ public class NewsClassifier {
     }
 
     public double[][] newsSimilarity(int _newsIndex) {
-        double[][] mySimilarity = null;
+        double[][] mySimilarity = new double[newsCleanedContent.length][2];
 
         //TODO 4.5 - 15 marks
 
+        for (int i = 0; i < mySimilarity.length; i++) {
+            mySimilarity[i][0] = i;
+            Vector vec1 = new Vector(newsTFIDF[_newsIndex]);
+            Vector vec2 = new Vector(newsTFIDF[i]);
+            mySimilarity[i][1] = vec1.cosineSimilarity(vec2);
+        }
+
+        // basic slightly altered bubble sort algorithm.
+        for (int i = 0; i < mySimilarity.length; i++) {
+            for (int j = 0; j < mySimilarity.length - 1; j++) {
+                if (mySimilarity[j][1] < mySimilarity[j + 1][1]) {
+                    double[] temp = mySimilarity[j];
+                    mySimilarity[j] = mySimilarity[j + 1];
+                    mySimilarity[j + 1] = temp;
+                }
+            }
+        }
 
         return mySimilarity;
     }
