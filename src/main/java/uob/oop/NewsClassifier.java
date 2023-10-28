@@ -63,28 +63,28 @@ public class NewsClassifier {
         return myCleanedContent;
     }
 
-    double TF(String word, String content) {
+    double TF(String _word, String _content) {
         double count = 0.0;
-        String[] words = content.split(" ");
+        String[] words = _content.split(" ");
         for (String str : words) {
-            if (word.equals(str)) {
+            if (_word.equals(str)) {
                 count++;
             }
         }
         return count / words.length;
     }
 
-    double IDF(String word, String[] corpus) {
+    double IDF(String _word, String[] _corpus) {
         double count = 0.0;
-        for (String doc : corpus) {
+        for (String doc : _corpus) {
             for (String str : doc.split(" ")) {
-                if (word.equals(str)) {
+                if (_word.equals(str)) {
                     count++;
                     break;
                 }
             }
         }
-        return Math.log(corpus.length/count) + 1;
+        return Math.log(_corpus.length/count) + 1;
     }
 
     public double[][] calculateTFIDF(String[] _cleanedContents) {
@@ -97,7 +97,7 @@ public class NewsClassifier {
             for (int j = 0; j < myTFIDF[0].length; j++) {
                 String word = vocabularyList[j];
                 String content = _cleanedContents[i];
-                myTFIDF[i][j] = TF(word, content) * IDF(word, _cleanedContents);
+                myTFIDF[i][j] = this.TF(word, content) * this.IDF(word, _cleanedContents);
             }
         }
 
@@ -157,6 +157,26 @@ public class NewsClassifier {
         return mySimilarity;
     }
 
+    static int[] sortArray(int[] _arr) {
+        int[] sortedArr = _arr.clone();
+        for (int i = 0; i < sortedArr.length; i++) {
+            for (int j = 0; j < sortedArr.length - 1; j++) {
+                if (sortedArr[j] > sortedArr[j + 1]) {
+                    int temp = sortedArr[j];
+                    sortedArr[j] = sortedArr[j + 1];
+                    sortedArr[j + 1] = temp;
+                }
+            }
+        }
+        return sortedArr;
+    }
+
+    static int[] trimArray(int _newSize, int[] _arr) {
+        int[] trimmedArray = new int[_newSize];
+        System.arraycopy(_arr, 0, trimmedArray, 0, _newSize);
+        return trimmedArray;
+    }
+
     public String groupingResults(String _firstTitle, String _secondTitle) {
         int[] arrayGroup1 = new int[newsTitles.length], arrayGroup2 = new int[newsTitles.length];
 
@@ -176,6 +196,7 @@ public class NewsClassifier {
 
         int firstCount = 0, secondCount = 0;
         for (double[] fRow : firstSimilarMatrix) {
+            // not in order need to linear search through second matrix
             for (double[] sRow : secondSimilarMatrix) {
                 if (fRow[0] == sRow[0]) {
                     if (fRow[1] >= sRow[1]) {
@@ -196,26 +217,6 @@ public class NewsClassifier {
         arrayGroup2 = sortArray(arrayGroup2);
 
         return resultString(arrayGroup1, arrayGroup2);
-    }
-
-    static int[] sortArray(int[] arr) {
-        int[] sortedArr = arr.clone();
-        for (int i = 0; i < sortedArr.length; i++) {
-            for (int j = 0; j < sortedArr.length - 1; j++) {
-                if (sortedArr[j] > sortedArr[j + 1]) {
-                    int temp = sortedArr[j];
-                    sortedArr[j] = sortedArr[j + 1];
-                    sortedArr[j + 1] = temp;
-                }
-            }
-        }
-        return sortedArr;
-    }
-
-     static int[] trimArray(int newSize, int[] arr) {
-        int[] trimmedArray = new int[newSize];
-        System.arraycopy(arr, 0, trimmedArray, 0, newSize);
-        return trimmedArray;
     }
 
     public String resultString(double[][] _similarityArray, int _groupNumber) {
