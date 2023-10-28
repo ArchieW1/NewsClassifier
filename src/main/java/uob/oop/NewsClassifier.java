@@ -158,12 +158,64 @@ public class NewsClassifier {
     }
 
     public String groupingResults(String _firstTitle, String _secondTitle) {
-        int[] arrayGroup1 = null, arrayGroup2 = null;
+        int[] arrayGroup1 = new int[newsTitles.length], arrayGroup2 = new int[newsTitles.length];
 
         //TODO 4.6 - 15 marks
 
+        int firstIndex = -1, secondIndex = -1;
+        for (int i = 0; i < newsTitles.length; i++) {
+            if (newsTitles[i].equals(_firstTitle)) {
+                firstIndex = i;
+            } else if (newsTitles[i].equals(_secondTitle)) {
+                secondIndex = i;
+            }
+        }
+
+        double[][] firstSimilarMatrix = this.newsSimilarity(firstIndex);
+        double[][] secondSimilarMatrix = this.newsSimilarity(secondIndex);
+
+        int firstCount = 0, secondCount = 0;
+        for (double[] fRow : firstSimilarMatrix) {
+            for (double[] sRow : secondSimilarMatrix) {
+                if (fRow[0] == sRow[0]) {
+                    if (fRow[1] >= sRow[1]) {
+                        arrayGroup1[firstCount] = (int) fRow[0];
+                        firstCount++;
+                    } else {
+                        arrayGroup2[secondCount] = (int) sRow[0];
+                        secondCount++;
+                    }
+                }
+            }
+        }
+
+        arrayGroup1 = trimArray(firstCount, arrayGroup1);
+        arrayGroup2 = trimArray(secondCount, arrayGroup2);
+
+        arrayGroup1 = sortArray(arrayGroup1);
+        arrayGroup2 = sortArray(arrayGroup2);
 
         return resultString(arrayGroup1, arrayGroup2);
+    }
+
+    static int[] sortArray(int[] arr) {
+        int[] sortedArr = arr.clone();
+        for (int i = 0; i < sortedArr.length; i++) {
+            for (int j = 0; j < sortedArr.length - 1; j++) {
+                if (sortedArr[j] > sortedArr[j + 1]) {
+                    int temp = sortedArr[j];
+                    sortedArr[j] = sortedArr[j + 1];
+                    sortedArr[j + 1] = temp;
+                }
+            }
+        }
+        return sortedArr;
+    }
+
+     static int[] trimArray(int newSize, int[] arr) {
+        int[] trimmedArray = new int[newSize];
+        System.arraycopy(arr, 0, trimmedArray, 0, newSize);
+        return trimmedArray;
     }
 
     public String resultString(double[][] _similarityArray, int _groupNumber) {
