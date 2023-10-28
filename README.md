@@ -1,6 +1,6 @@
 # News Classifier
 
-Assignment 1 for OOP my OOP module.
+Assignment 1 for my OOP module.
 
 ---
 
