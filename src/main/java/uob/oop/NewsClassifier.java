@@ -107,26 +107,30 @@ public class NewsClassifier {
     public String[] buildVocabulary(String[] _cleanedContents) {
         //TODO 4.4 - 10 marks
 
-        String[] arrayVocabulary = new String[0];
+        String[] arrayVocabulary = new String[100];
 
+        int size = 0;
         for (String sentence : _cleanedContents) {
             for (String word : sentence.split(" ")) {
-                boolean isUnique = true;
                 for (String str : arrayVocabulary) {
                     if (word.equals(str)) {
-                        isUnique = false;
+                        if (size >= arrayVocabulary.length) {
+                            int newLength = arrayVocabulary.length * 2;
+                            String[] scaledArray = new String[newLength];
+                            System.arraycopy(arrayVocabulary, 0, scaledArray, 0, arrayVocabulary.length);
+                            arrayVocabulary = scaledArray;
+                        }
+                        arrayVocabulary[size] = word;
+                        size++;
                         break;
                     }
                 }
-                if (isUnique) {
-                    int newSize = arrayVocabulary.length + 1;
-                    String[] scaledArray = new String[newSize];
-                    System.arraycopy(arrayVocabulary, 0, scaledArray, 0, arrayVocabulary.length);
-                    arrayVocabulary = scaledArray;
-                    arrayVocabulary[arrayVocabulary.length - 1] = word;
-                }
             }
         }
+
+        String[] trimmedArray = new String[size];
+        System.arraycopy(arrayVocabulary, 0, trimmedArray, 0, size);
+        arrayVocabulary = trimmedArray;
 
         return arrayVocabulary;
     }
@@ -157,20 +161,6 @@ public class NewsClassifier {
         return mySimilarity;
     }
 
-    static int[] sortArray(int[] _arr) {
-        int[] sortedArr = _arr.clone();
-        for (int i = 0; i < sortedArr.length; i++) {
-            for (int j = 0; j < sortedArr.length - 1; j++) {
-                if (sortedArr[j] > sortedArr[j + 1]) {
-                    int temp = sortedArr[j];
-                    sortedArr[j] = sortedArr[j + 1];
-                    sortedArr[j + 1] = temp;
-                }
-            }
-        }
-        return sortedArr;
-    }
-
     static int[] trimArray(int _newSize, int[] _arr) {
         int[] trimmedArray = new int[_newSize];
         System.arraycopy(_arr, 0, trimmedArray, 0, _newSize);
@@ -195,26 +185,33 @@ public class NewsClassifier {
         double[][] secondSimilarMatrix = this.newsSimilarity(secondIndex);
 
         int firstCount = 0, secondCount = 0;
-        for (double[] fRow : firstSimilarMatrix) {
-            // not in order need to linear search through second matrix
-            for (double[] sRow : secondSimilarMatrix) {
-                if (fRow[0] == sRow[0]) {
-                    if (fRow[1] >= sRow[1]) {
-                        arrayGroup1[firstCount] = (int) fRow[0];
-                        firstCount++;
-                    } else {
-                        arrayGroup2[secondCount] = (int) sRow[0];
-                        secondCount++;
-                    }
+        for (int i = 0; i < newsTitles.length; i++) {
+            double[] currentFRow = new double[0];
+            double[] currentSRow = new double[0];
+            for (double[] fRow : firstSimilarMatrix) {
+                if (fRow[0] == i) {
+                    currentFRow = fRow;
+                    break;
                 }
+            }
+            for (double[] sRow : secondSimilarMatrix) {
+                if (sRow[0] == i) {
+                    currentSRow = sRow;
+                    break;
+                }
+            }
+
+            if (currentFRow[1] >= currentSRow[1]) {
+                arrayGroup1[firstCount] = (int) currentFRow[0];
+                firstCount++;
+            } else {
+                arrayGroup2[secondCount] = (int) currentSRow[0];
+                secondCount++;
             }
         }
 
         arrayGroup1 = trimArray(firstCount, arrayGroup1);
         arrayGroup2 = trimArray(secondCount, arrayGroup2);
-
-        arrayGroup1 = sortArray(arrayGroup1);
-        arrayGroup2 = sortArray(arrayGroup2);
 
         return resultString(arrayGroup1, arrayGroup2);
     }
