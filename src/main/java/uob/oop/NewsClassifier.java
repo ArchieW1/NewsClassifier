@@ -107,30 +107,26 @@ public class NewsClassifier {
     public String[] buildVocabulary(String[] _cleanedContents) {
         //TODO 4.4 - 10 marks
 
-        String[] arrayVocabulary = new String[100];
+        String[] arrayVocabulary = new String[0];
 
-        int size = 0;
         for (String sentence : _cleanedContents) {
             for (String word : sentence.split(" ")) {
+                boolean isUnique = true;
                 for (String str : arrayVocabulary) {
                     if (word.equals(str)) {
-                        if (size >= arrayVocabulary.length) {
-                            int newLength = arrayVocabulary.length * 2;
-                            String[] scaledArray = new String[newLength];
-                            System.arraycopy(arrayVocabulary, 0, scaledArray, 0, arrayVocabulary.length);
-                            arrayVocabulary = scaledArray;
-                        }
-                        arrayVocabulary[size] = word;
-                        size++;
+                        isUnique = false;
                         break;
                     }
                 }
+                if (isUnique) {
+                    int newSize = arrayVocabulary.length + 1;
+                    String[] scaledArray = new String[newSize];
+                    System.arraycopy(arrayVocabulary, 0, scaledArray, 0, arrayVocabulary.length);
+                    arrayVocabulary = scaledArray;
+                    arrayVocabulary[arrayVocabulary.length - 1] = word;
+                }
             }
         }
-
-        String[] trimmedArray = new String[size];
-        System.arraycopy(arrayVocabulary, 0, trimmedArray, 0, size);
-        arrayVocabulary = trimmedArray;
 
         return arrayVocabulary;
     }
