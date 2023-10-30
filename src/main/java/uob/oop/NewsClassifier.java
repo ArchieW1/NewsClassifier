@@ -88,7 +88,7 @@ public class NewsClassifier {
     }
 
     public double[][] calculateTFIDF(String[] _cleanedContents) {
-        String[] vocabularyList = buildVocabulary(_cleanedContents);
+        String[] vocabularyList = this.buildVocabulary(_cleanedContents);
         double[][] myTFIDF = new double[_cleanedContents.length][vocabularyList.length];
 
         //TODO 4.3 - 10 marks

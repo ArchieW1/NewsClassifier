@@ -42,7 +42,7 @@ public class Vector {
         //TODO Task 3.6 - 6 marks
 
         if (_size == doubElements.length || _size <= 0)
-            return this;
+            return new Vector(doubElements.clone());
 
         double[] newVector = new double[_size];
         for (int i = 0; i < newVector.length; i++) {
