@@ -41,23 +41,23 @@ public class NewsClassifier {
 
     public void loadData() {
         //TODO 4.1 - 2 marks
-        newsTitles = new String[myHTMLs.length];
-        newsContents = new String[myHTMLs.length];
+        this.newsTitles = new String[this.myHTMLs.length];
+        this.newsContents = new String[this.myHTMLs.length];
 
         for (int i = 0; i < myHTMLs.length; i++) {
-            newsTitles[i] = HtmlParser.getNewsTitle(myHTMLs[i]);
-            newsContents[i] = HtmlParser.getNewsContent(myHTMLs[i]);
+            this.newsTitles[i] = HtmlParser.getNewsTitle(this.myHTMLs[i]);
+            this.newsContents[i] = HtmlParser.getNewsContent(this.myHTMLs[i]);
         }
     }
 
     public String[] preProcessing() {
-        String[] myCleanedContent = new String[newsContents.length];
+        String[] myCleanedContent = new String[this.newsContents.length];
         //TODO 4.2 - 5 marks
 
         for (int i = 0; i < myCleanedContent.length; i++) {
-            String cleaned = NLP.textCleaning(newsContents[i]);
+            String cleaned = NLP.textCleaning(this.newsContents[i]);
             String cleanedLemmanized = NLP.textLemmatization(cleaned);
-            myCleanedContent[i] = NLP.removeStopWords(cleanedLemmanized, myStopWords);
+            myCleanedContent[i] = NLP.removeStopWords(cleanedLemmanized, this.myStopWords);
         }
 
         return myCleanedContent;
@@ -132,14 +132,14 @@ public class NewsClassifier {
     }
 
     public double[][] newsSimilarity(int _newsIndex) {
-        double[][] mySimilarity = new double[newsCleanedContent.length][2];
+        double[][] mySimilarity = new double[this.newsCleanedContent.length][2];
 
         //TODO 4.5 - 15 marks
 
         for (int i = 0; i < mySimilarity.length; i++) {
             mySimilarity[i][0] = i;
-            Vector vec1 = new Vector(newsTFIDF[_newsIndex]);
-            Vector vec2 = new Vector(newsTFIDF[i]);
+            Vector vec1 = new Vector(this.newsTFIDF[_newsIndex]);
+            Vector vec2 = new Vector(this.newsTFIDF[i]);
             mySimilarity[i][1] = vec1.cosineSimilarity(vec2);
         }
 
@@ -164,15 +164,15 @@ public class NewsClassifier {
     }
 
     public String groupingResults(String _firstTitle, String _secondTitle) {
-        int[] arrayGroup1 = new int[newsTitles.length], arrayGroup2 = new int[newsTitles.length];
+        int[] arrayGroup1 = new int[this.newsTitles.length], arrayGroup2 = new int[this.newsTitles.length];
 
         //TODO 4.6 - 15 marks
 
         int firstIndex = -1, secondIndex = -1;
-        for (int i = 0; i < newsTitles.length; i++) {
-            if (newsTitles[i].equals(_firstTitle)) {
+        for (int i = 0; i < this.newsTitles.length; i++) {
+            if (this.newsTitles[i].equals(_firstTitle)) {
                 firstIndex = i;
-            } else if (newsTitles[i].equals(_secondTitle)) {
+            } else if (this.newsTitles[i].equals(_secondTitle)) {
                 secondIndex = i;
             }
         }
@@ -181,7 +181,7 @@ public class NewsClassifier {
         double[][] secondSimilarMatrix = this.newsSimilarity(secondIndex);
 
         int firstCount = 0, secondCount = 0;
-        for (int i = 0; i < newsTitles.length; i++) {
+        for (int i = 0; i < this.newsTitles.length; i++) {
             double[] currentFRow = new double[0];
             double[] currentSRow = new double[0];
             for (double[] fRow : firstSimilarMatrix) {
