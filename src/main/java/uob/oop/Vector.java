@@ -106,19 +106,21 @@ public class Vector {
         return sum;
     }
 
-    public double magnitude() {
-        double sum = 0.0;
-        for (double element : doubElements) {
-            sum += Math.pow(element, 2);
-        }
-        return Math.sqrt(sum);
-    }
-
     public double cosineSimilarity(Vector _v) {
         //TODO Task 3.10 - 6.5 marks
 
         _v = this.resizeVectorsToSame(_v);
-        return this.dotProduct(_v) / (this.magnitude() * _v.magnitude());
+
+        // could be broken up for readability but kept in 1 loop for optimisation since used thousands of times.
+        double[] vElements = _v.getAllElements();
+        double dotProductSum = 0.0, magnitudeSumDoub = 0.0, magnitudeSumV = 0.0;
+        for (int i = 0; i < this.doubElements.length; i++) {
+            dotProductSum += this.doubElements[i] * vElements[i];
+            magnitudeSumDoub += Math.pow(this.doubElements[i], 2);
+            magnitudeSumV += Math.pow(vElements[i], 2);
+        }
+
+        return dotProductSum / Math.sqrt(magnitudeSumDoub * magnitudeSumV);
     }
 
     @Override
