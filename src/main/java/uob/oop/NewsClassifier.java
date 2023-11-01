@@ -193,15 +193,16 @@ public class NewsClassifier {
         for (int i = 0; i < this.newsTitles.length; i++) {
             double[] currentFRow = new double[0];
             double[] currentSRow = new double[0];
-            for (double[] fRow : firstSimilarMatrix) {
-                if (fRow[0] == i) {
-                    currentFRow = fRow;
-                    break;
+            boolean isFirstFound = false, isSecondFound = false;
+            for (int j = 0; j < firstSimilarMatrix.length; j++) {
+                if (firstSimilarMatrix[j][0] == i) {
+                    currentFRow = firstSimilarMatrix[j];
+                    isFirstFound = true;
+                } else if (secondSimilarMatrix[j][0] == i) {
+                    currentSRow = secondSimilarMatrix[j];
+                    isSecondFound = true;
                 }
-            }
-            for (double[] sRow : secondSimilarMatrix) {
-                if (sRow[0] == i) {
-                    currentSRow = sRow;
+                if (isFirstFound && isSecondFound) {
                     break;
                 }
             }
