@@ -63,45 +63,45 @@ public class NewsClassifier {
         return myCleanedContent;
     }
 
-    double TF(String _word, String _content) {
-        double count = 0.0;
-        String[] words = _content.split(" ");
-        for (String str : words) {
-            if (_word.equals(str)) {
-                count++;
-            }
-        }
-        return count / words.length;
-    }
-
-    double IDF(String _word, String[] _corpus) {
-        double count = 0.0;
-        for (String doc : _corpus) {
-            for (String str : doc.split(" ")) {
-                if (_word.equals(str)) {
-                    count++;
-                    break;
-                }
-            }
-        }
-        return Math.log(_corpus.length/count) + 1;
-    }
-
     public double[][] calculateTFIDF(String[] _cleanedContents) {
-        String[] vocabularyList = this.buildVocabulary(_cleanedContents);
-        double[][] myTFIDF = new double[_cleanedContents.length][vocabularyList.length];
+        String[] vocabularyList = buildVocabulary(_cleanedContents);
 
         //TODO 4.3 - 10 marks
 
-        for (int i = 0; i < myTFIDF.length; i++) {
-            for (int j = 0; j < myTFIDF[0].length; j++) {
-                String word = vocabularyList[j];
-                String content = _cleanedContents[i];
-                myTFIDF[i][j] = this.TF(word, content) * this.IDF(word, _cleanedContents);
+        int[][] totalWordCountMatrix = new int[_cleanedContents.length][vocabularyList.length];
+        for (int i = 0; i < _cleanedContents.length; i++){
+            String[] words = _cleanedContents[i].split(" ");
+            int count = 0;
+            for (int j = 0; j < vocabularyList.length; j++) {
+                for (String word : words) {
+                    if (vocabularyList[j].equals(word)) {
+                        count++;
+                    }
+                }
+                totalWordCountMatrix[i][j] = count;
+                count = 0;
             }
         }
 
-        return myTFIDF;
+        int[] wordAppearsCounts = new int[vocabularyList.length];
+        for (int i = 0; i < vocabularyList.length; i++) {
+            for (int j = 0; j < _cleanedContents.length; j++) {
+                if (totalWordCountMatrix[j][i] != 0) {
+                    wordAppearsCounts[i]++;
+                }
+            }
+        }
+
+        double[][] TFIDFMatrix = new double[_cleanedContents.length][vocabularyList.length];
+        for (int i = 0; i < _cleanedContents.length; i++) {
+            String[] words = _cleanedContents[i].split(" ");
+            for (int j = 0; j < vocabularyList.length; j++) {
+                TFIDFMatrix[i][j] = ((double) totalWordCountMatrix[i][j] / words.length) *
+                        (Math.log((double) _cleanedContents.length / wordAppearsCounts[j]) + 1);
+            }
+        }
+
+        return TFIDFMatrix;
     }
 
     public String[] buildVocabulary(String[] _cleanedContents) {
