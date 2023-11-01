@@ -145,9 +145,9 @@ public class NewsClassifier {
 
         //TODO 4.5 - 15 marks
 
+        Vector vec1 = new Vector(this.newsTFIDF[_newsIndex]);
         for (int i = 0; i < mySimilarity.length; i++) {
             mySimilarity[i][0] = i;
-            Vector vec1 = new Vector(this.newsTFIDF[_newsIndex]);
             Vector vec2 = new Vector(this.newsTFIDF[i]);
             mySimilarity[i][1] = vec1.cosineSimilarity(vec2);
         }
