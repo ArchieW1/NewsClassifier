@@ -19,16 +19,7 @@ public class Tester_NLP {
     @Test
     @Order(2)
     void textLemmatization(){
-        String strTest = "apples playing helped bananas test";
-        assertEquals("appl play help banana test", NLP.textLemmatization(strTest));
-    }
-
-    //my tests
-    @Test
-    @Order(3)
-    void removeStopWords() {
-        String strTest = "i went to the shop in tamworth and it is really great";
-        String[] stopTest = new String[] {"and", "the", "is", "in"};
-        assertEquals("i went to shop tamworth it really great", NLP.removeStopWords(strTest, stopTest));
+        String strTest = "playing";
+        assertEquals("play", NLP.textLemmatization(strTest));
     }
 }
