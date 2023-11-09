@@ -14,7 +14,7 @@ public class Vector {
         if (_index < 0 || _index >= this.doubElements.length)
             return -1;
 
-        return this.doubElements[_index];
+        return this.doubElements[_index]; //you need to modify the return value
     }
 
     public void setElementatIndex(double _value, int _index) {
@@ -30,12 +30,12 @@ public class Vector {
     public double[] getAllElements() {
         //TODO Task 3.4 - 0.5 marks
 
-        return this.doubElements;
+        return this.doubElements; //you need to modify the return value
     }
 
     public int getVectorSize() {
         //TODO Task 3.5 - 0.5 marks
-        return this.doubElements.length;
+        return this.doubElements.length; //you need to modify the return value
     }
 
     public Vector reSize(int _size) {
@@ -52,7 +52,7 @@ public class Vector {
                 newVector[i] = this.doubElements[i];
             }
         }
-        return new Vector(newVector);
+        return new Vector(newVector); //you need to modify the return value
     }
 
     Vector resizeVectorsToSame(Vector _v) {
@@ -75,7 +75,7 @@ public class Vector {
             newVector[i] = this.doubElements[i] + vElements[i];
         }
 
-        return new Vector(newVector);
+        return new Vector(newVector); //you need to modify the return value
     }
 
     public Vector subtraction(Vector _v) {
@@ -89,7 +89,7 @@ public class Vector {
             newVector[i] = this.doubElements[i] - vElements[i];
         }
 
-        return new Vector(newVector);
+        return new Vector(newVector); //you need to modify the return value
     }
 
     public double dotProduct(Vector _v) {
@@ -103,7 +103,7 @@ public class Vector {
             sum += this.doubElements[i] * vElements[i];
         }
 
-        return sum;
+        return sum; //you need to modify the return value
     }
 
     public double cosineSimilarity(Vector _v) {
@@ -120,7 +120,7 @@ public class Vector {
             magnitudeSumV += Math.pow(vElements[i], 2);
         }
 
-        return dotProductSum / Math.sqrt(magnitudeSumDoub * magnitudeSumV);
+        return dotProductSum / Math.sqrt(magnitudeSumDoub * magnitudeSumV); //you need to modify the return value
     }
 
     @Override

@@ -14,13 +14,13 @@ public class HtmlParser {
         final String TITLE_END_TAG = "</title>";
         final String SECTION_SEPARATOR = " | ";
 
-        if (!_htmlCode.contains(TITLE_TAG) || !_htmlCode.contains(TITLE_END_TAG))
-            return "Title not found!";
+        if (_htmlCode.contains(TITLE_TAG) && _htmlCode.contains(TITLE_END_TAG)) {
+            int titleStartIndex = _htmlCode.indexOf(TITLE_TAG) + TITLE_TAG.length();
+            int titleEndIndex = _htmlCode.indexOf(SECTION_SEPARATOR, titleStartIndex);
+            return _htmlCode.substring(titleStartIndex, titleEndIndex);
+        }
 
-        int titleStartIndex = _htmlCode.indexOf(TITLE_TAG) + TITLE_TAG.length();
-        int titleEndIndex = _htmlCode.indexOf(SECTION_SEPARATOR, titleStartIndex);
-
-        return _htmlCode.substring(titleStartIndex, titleEndIndex);
+        return "Title not found!";
     }
 
     /***
@@ -33,15 +33,16 @@ public class HtmlParser {
 
         final String BODY_KEY = "\"articleBody\":";
 
-        if (!_htmlCode.contains(BODY_KEY))
-            return "Content not found!";
+        if (_htmlCode.contains(BODY_KEY)) {
+            int keyIndex = _htmlCode.indexOf(BODY_KEY) + BODY_KEY.length();
+            int bodyStartIndex = _htmlCode.indexOf('"', keyIndex) + 1;
+            String htmlOnlyEssentialQuotes = _htmlCode.replace("\\\"", "  ");
+            int bodyEndIndex = htmlOnlyEssentialQuotes.indexOf('"', bodyStartIndex) - 1;
 
-        int keyIndex = _htmlCode.indexOf(BODY_KEY) + BODY_KEY.length();
-        int bodyStartIndex = _htmlCode.indexOf('"', keyIndex) + 1;
-        String htmlOnlyEssentialQuotes = _htmlCode.replace("\\\"", "  ");
-        int bodyEndIndex = htmlOnlyEssentialQuotes.indexOf('"', bodyStartIndex) - 1;
+            return _htmlCode.substring(bodyStartIndex, bodyEndIndex).toLowerCase();
+        }
 
-        return _htmlCode.substring(bodyStartIndex, bodyEndIndex).toLowerCase();
+        return "Content not found!";
     }
 
 

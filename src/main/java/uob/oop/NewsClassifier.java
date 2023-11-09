@@ -51,8 +51,9 @@ public class NewsClassifier {
     }
 
     public String[] preProcessing() {
-        String[] myCleanedContent = new String[this.newsContents.length];
+        String[] myCleanedContent = null;
         //TODO 4.2 - 5 marks
+        myCleanedContent = new String[this.newsContents.length];
 
         for (int i = 0; i < myCleanedContent.length; i++) {
             String cleaned = NLP.textCleaning(this.newsContents[i]);
@@ -65,6 +66,7 @@ public class NewsClassifier {
 
     public double[][] calculateTFIDF(String[] _cleanedContents) {
         String[] vocabularyList = buildVocabulary(_cleanedContents);
+        double[][] myTFIDF = null;
 
         //TODO 4.3 - 10 marks
 
@@ -92,22 +94,24 @@ public class NewsClassifier {
             }
         }
 
-        double[][] TFIDFMatrix = new double[_cleanedContents.length][vocabularyList.length];
+        myTFIDF = new double[_cleanedContents.length][vocabularyList.length];
         for (int i = 0; i < _cleanedContents.length; i++) {
             String[] words = _cleanedContents[i].split(" ");
             for (int j = 0; j < vocabularyList.length; j++) {
-                TFIDFMatrix[i][j] = ((double) totalWordCountMatrix[i][j] / words.length) *
+                myTFIDF[i][j] = ((double) totalWordCountMatrix[i][j] / words.length) *
                         (Math.log((double) _cleanedContents.length / wordAppearsCounts[j]) + 1);
             }
         }
 
-        return TFIDFMatrix;
+        return myTFIDF;
     }
 
     public String[] buildVocabulary(String[] _cleanedContents) {
+        String[] arrayVocabulary = null;
+
         //TODO 4.4 - 10 marks
 
-        String[] arrayVocabulary = new String[1000];
+        arrayVocabulary = new String[1000];
         int size = 0;
         for (String sentence : _cleanedContents) {
             for (String word : sentence.split(" ")) {
@@ -141,9 +145,11 @@ public class NewsClassifier {
     }
 
     public double[][] newsSimilarity(int _newsIndex) {
-        double[][] mySimilarity = new double[this.newsCleanedContent.length][2];
+        double[][] mySimilarity = null;
 
         //TODO 4.5 - 15 marks
+
+        mySimilarity = new double[this.newsCleanedContent.length][2];
 
         Vector vec1 = new Vector(this.newsTFIDF[_newsIndex]);
         for (int i = 0; i < mySimilarity.length; i++) {
@@ -200,9 +206,12 @@ public class NewsClassifier {
     }
 
     public String groupingResults(String _firstTitle, String _secondTitle) {
-        int[] arrayGroup1 = new int[this.newsTitles.length], arrayGroup2 = new int[this.newsTitles.length];
+        int[] arrayGroup1 = null, arrayGroup2 = null;
 
         //TODO 4.6 - 15 marks
+
+        arrayGroup1 = new int[this.newsTitles.length];
+        arrayGroup2 = new int[this.newsTitles.length];
 
         int firstIndex = -1, secondIndex = -1;
         for (int i = 0; i < this.newsTitles.length; i++) {
