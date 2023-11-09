@@ -152,18 +152,45 @@ public class NewsClassifier {
             mySimilarity[i][1] = vec1.cosineSimilarity(vec2);
         }
 
-        // basic slightly altered bubble sort algorithm.
-        for (int i = 0; i < mySimilarity.length; i++) {
-            for (int j = 0; j < mySimilarity.length - 1; j++) {
-                if (mySimilarity[j][1] < mySimilarity[j + 1][1]) {
-                    double[] temp = mySimilarity[j];
-                    mySimilarity[j] = mySimilarity[j + 1];
-                    mySimilarity[j + 1] = temp;
-                }
-            }
-        }
+        mergeSort(mySimilarity, mySimilarity.length);
 
         return mySimilarity;
+    }
+
+    static void mergeSort(double[][] matrix, int n) {
+        if (n < 2) {
+            return;
+        }
+        int mid = n / 2;
+        double[][] l = new double[mid][2];
+        double[][] r = new double[n - mid][2];
+
+        System.arraycopy(matrix, 0, l, 0, mid);
+        if (n - mid >= 0) {
+            System.arraycopy(matrix, mid, r, 0, n - mid);
+        }
+
+        mergeSort(l, mid);
+        mergeSort(r, n - mid);
+
+        merge(matrix, l, r, mid, n - mid);
+    }
+
+    static void merge(double[][] matrix, double[][] l, double[][] r, int left, int right) {
+        int i = 0, j = 0, k = 0;
+        while (i < left && j < right) {
+            if (l[i][1] >= r[j][1]) {
+                matrix[k++] = l[i++];
+            } else {
+                matrix[k++] = r[j++];
+            }
+        }
+        while (i < left) {
+            matrix[k++] = l[i++];
+        }
+        while (j < right) {
+            matrix[k++] = r[j++];
+        }
     }
 
     static int[] trimArray(int _newSize, int[] _arr) {
